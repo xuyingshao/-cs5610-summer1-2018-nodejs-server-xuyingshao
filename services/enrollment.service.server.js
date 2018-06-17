@@ -1,3 +1,7 @@
+/**
+ * Student information is included in session.
+ * No need to include studentId in mapping.
+ */
 module.exports = function (app) {
   app.post('/api/section/:sectionId/enroll', enrollStudentInSection);
   app.get('/api/student/section', findSectionsForStudent);
@@ -17,16 +21,14 @@ module.exports = function (app) {
       section: sectionId
     };
 
-
     sectionModel.findSectionById(sectionId)
-      .then(function (section) {
-        if (section[0].seats === 0) {
+      .then(function (sections) {
+        if (sections[0].seats === 0) {
           res.sendStatus(404);
         } else {
           enrollmentModel.findEnrollment(enrollment)
-            .then(function (data) {
-
-              if (data.length === 0) {
+            .then(function (enrollments) {
+              if (enrollments.length === 0) {
                 sectionModel.decrementSectionSeats(sectionId)
                   .then(function () {
                     return enrollmentModel.enrollStudentInSection(enrollment);
@@ -41,6 +43,7 @@ module.exports = function (app) {
         }
       });
   }
+
 
   function findSectionsForStudent(req, res) {
     var currentUser = req.session['currentUser'];
@@ -63,13 +66,19 @@ module.exports = function (app) {
       section: sectionId
     };
 
-    sectionModel.incrementSectionSeats(sectionId)
-      .then(() => enrollmentModel.unenrollStudentFromSection(enrollment));
-
-    // enrollmentModel.unenrollStudentFromSection(enrollment)
-    //   .then(() => {
-    //     sectionModel.incrementSectionSeats(sectionId);
-    //     console.log('increment');
-    //   })
+    enrollmentModel.findEnrollment(enrollment)
+      .then((enrollments) => {
+        if (enrollments.length === 0) {
+          res.sendStatus(404);
+        } else {
+          sectionModel.incrementSectionSeats(sectionId)
+            .then(() => {
+              return enrollmentModel.unenrollStudentFromSection(enrollment)
+            })
+            .then((response) => {
+              res.json(response);
+            });
+        }
+      })
   }
 };

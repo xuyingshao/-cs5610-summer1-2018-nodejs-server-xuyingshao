@@ -19,7 +19,6 @@ function decrementSectionSeats(sectionId) {
 }
 
 function incrementSectionSeats(sectionId) {
-  console.log(sectionId + ' in section model');   // FIXME
   return sectionModel.update({_id: sectionId}, {$inc: {seats: +1}});
 }
 
