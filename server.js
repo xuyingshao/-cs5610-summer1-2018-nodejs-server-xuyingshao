@@ -1,7 +1,10 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-mongoose.connect('mongodb://localhost/test');
+
+// mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://heroku_qn8fgmb2:d6fgmkijnppti4buirrnf8bfjn@ds263590.mlab.com:63590/heroku_qn8fgmb2/course_manager');
+
 
 var app = express();
 
@@ -20,64 +23,46 @@ var session = require('express-session');
 app.use(session({
   resave: false,
   saveUninitialized: true,
-  secret: 'any string'
+  secret: 'any string',
+  cookie: {
+    maxAge: 1800 * 1000,
+  }
 }));
 
-app.get('/api/session/set/:name/:value',
-  setSession);
-
-app.get('/api/session/get/:name',
-  getSession);
-
-app.get('/api/session/get',
-  getSessionAll);
-
-app.get('/api/session/reset',
-  resetSession);
+app.get('/api/session/set/:name/:value', setSession);
+app.get('/api/session/get/:name', getSession);
+app.get('/api/session/get', getSessionAll);
+app.get('/api/session/reset', resetSession);
 
 function setSession(req, res) {
   var name = req.params['name'];
   var value = req.params['value'];
 
   req.session[name] = value;
-  res.send(value);
-  // res.send(session);
+  res.json(value);
 }
 
 function getSession(req, res) {
   var name = req.params['name'];
   var value = req.session[name];
-  res.send(value);
+  if (value === undefined) {
+    res.sendStatus(404);
+  } else {
+    res.json(value);
+  }
 }
 
 function getSessionAll(req, res) {
-  res.send(req.session);
+  res.json(req.session);
 }
 
 function resetSession(req, res) {
   req.session.destroy();
-  res.send(200);
+  res.sendStatus(200);
 }
 
-app.get('/', function (req, res) {
-  res.send('Hello world')
-});
-
-app.get('/message', function (req, res) {
-  res.send('Message');
-});
-
-app.get('/message/:theMessage', function (req, res) {
-  var theMessage = req.params['theMessage'];
-  res.send(theMessage);
-});
-
-
-var userService = require('./services/user.service.server');
-userService(app);
-
+require('./services/user.service.server')(app);
 require('./services/section.service.server')(app);
-
 require('./services/enrollment.service.server')(app);
 
 app.listen(4000);    // port

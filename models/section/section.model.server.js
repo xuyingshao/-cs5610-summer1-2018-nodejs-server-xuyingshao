@@ -22,12 +22,30 @@ function incrementSectionSeats(sectionId) {
   return sectionModel.update({_id: sectionId}, {$inc: {seats: +1}});
 }
 
+function updateSection(sectionId, section) {
+  return sectionModel.update({_id: sectionId},
+    {
+      $set: {
+        name: section.name,
+        seats: section.seats,
+        courseId: section.courseId
+      }
+    });
+}
+
+function deleteSection(sectionId) {
+  return sectionModel.remove({_id: sectionId});
+}
+
+
 var api = {
   createSection: createSection,
   findSectionsForCourse: findSectionsForCourse,
   decrementSectionSeats: decrementSectionSeats,
   incrementSectionSeats: incrementSectionSeats,
-  findSectionById: findSectionById
+  findSectionById: findSectionById,
+  updateSection: updateSection,
+  deleteSection: deleteSection
 };
 
 module.exports = api;

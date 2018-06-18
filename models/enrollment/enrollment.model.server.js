@@ -6,7 +6,7 @@ function findEnrollment(enrollemnt) {
   return enrollmentModel.find(enrollemnt);
 }
 
-function findSectionsForStudent(studentId) {
+function findEnrollmentsForStudent(studentId) {
   return enrollmentModel.find({student: studentId})
     .populate('section')
     .exec();
@@ -22,7 +22,7 @@ function unenrollStudentFromSection(enrollment) {
 
 var api = {
   findEnrollment: findEnrollment,
-  findSectionsForStudent: findSectionsForStudent,
+  findEnrollmentsForStudent: findEnrollmentsForStudent,
   enrollStudentInSection: enrollStudentInSection,
   unenrollStudentFromSection: unenrollStudentFromSection
 };

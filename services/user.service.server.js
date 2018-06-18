@@ -1,20 +1,14 @@
 module.exports = function (app) {
 
-  app.get('/api/user', findAllUsers);
-  app.post('/api/user', register);
-  app.get('/api/profile', profile);
-  app.post('/api/logout', logout);
+  app.post('/api/register', register);
   app.post('/api/login', login);
-
+  app.post('/api/logout', logout);
+  app.get('/api/profile', profile);
+  app.put('/api/profile', updateProfile);
+  app.delete('/api/profile', deleteProfile);
+  app.get('/api/user', findAllUsers);
 
   var userModel = require('../models/user/user.model.server');
-
-  function findAllUsers(req, res) {
-    userModel.findAllUsers()
-      .then(function (users) {
-        res.json(users);
-      });
-  }
 
   function register(req, res) {
     var user = req.body;
@@ -33,14 +27,6 @@ module.exports = function (app) {
       });
   }
 
-  function profile(req, res) {
-    res.json(req.session['currentUser']);
-  }
-
-  function logout(req, res) {
-    req.session.destroy();
-    res.sendStatus(200);
-  }
 
   function login(req, res) {
     var user = req.body;
@@ -55,5 +41,56 @@ module.exports = function (app) {
         }
       })
   }
-}
-;
+
+
+  function logout(req, res) {
+    req.session.destroy();
+    res.sendStatus(200);
+  }
+
+
+  function profile(req, res) {
+    var currentUser = req.session['currentUser'];
+
+    if (currentUser === undefined) {
+      res.sendStatus(404);
+    }
+    else {
+      var userId = currentUser._id;
+      userModel.findUserById(userId)
+        .then(function (users) {
+          res.json(users[0]);
+        });
+    }
+  }
+
+
+  function updateProfile(req, res) {
+    // var currentUser = req.session['currentUser'];
+    // var userId = currentUser._id;
+    var user = req.body;
+
+    userModel.updateUser(user)
+      .then(function(response) {
+        res.json(response);
+      })
+  }
+
+  function deleteProfile(req, res) {
+    var currentUser = req.session['currentUser'];
+    var userId = currentUser._id;
+
+    userModel.deleteProfile(userId)
+      .then(function(user) {
+        res.json(user);
+      })
+  }
+
+
+  function findAllUsers(req, res) {
+    userModel.findAllUsers()
+      .then(function (users) {
+        res.json(users);
+      });
+  }
+};
