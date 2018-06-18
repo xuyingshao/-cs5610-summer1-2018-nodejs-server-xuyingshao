@@ -7,7 +7,7 @@ module.exports = function(app) {
   app.delete('/api/section/:sectionId', deleteSection);
 
   var sectionModel = require('../models/section/section.model.server');
-
+  var enrollmentModel = require('../models/enrollment/enrollment.model.server');
 
   function createSection(req, res) {
     var section = req.body;
@@ -51,6 +51,9 @@ module.exports = function(app) {
 
     sectionModel.deleteSection(sectionId)
       .then(function(status) {
+        enrollmentModel.deleteEnrollment(sectionId)
+
+
         res.json(status);
     })
   }
