@@ -51,9 +51,7 @@ module.exports = function(app) {
 
     sectionModel.deleteSection(sectionId)
       .then(function(status) {
-        enrollmentModel.deleteEnrollment(sectionId)
-
-
+        enrollmentModel.deleteEnrollmentBySectionId(sectionId);
         res.json(status);
     })
   }
