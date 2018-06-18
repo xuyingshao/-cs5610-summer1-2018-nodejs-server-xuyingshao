@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
 // mongoose.connect('mongodb://localhost/test');
-mongoose.connect('mongodb://heroku_qn8fgmb2:d6fgmkijnppti4buirrnf8bfjn@ds263590.mlab.com:63590/heroku_qn8fgmb2/course_manager');
+mongoose.connect('mongodb://heroku_qn8fgmb2:d6fgmkijnppti4buirrnf8bfjn@ds263590.mlab.com:63590/heroku_qn8fgmb2');
 
 
 var app = express();
