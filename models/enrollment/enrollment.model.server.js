@@ -20,8 +20,8 @@ function unenrollStudentFromSection(enrollment) {
   return enrollmentModel.remove(enrollment);
 }
 
-function deleteEnrollmentBySectionId(sectionId) {
-  return enrollmentModel.remove({section: sectionId});    // FIXME
+function deleteEnrollmentBySection(section) {
+  return enrollmentModel.remove({section: section});    // FIXME
 }
 
 var api = {
@@ -29,7 +29,7 @@ var api = {
   findEnrollmentsForStudent: findEnrollmentsForStudent,
   enrollStudentInSection: enrollStudentInSection,
   unenrollStudentFromSection: unenrollStudentFromSection,
-  deleteEnrollmentBySectionId: deleteEnrollmentBySectionId
+  deleteEnrollmentBySection: deleteEnrollmentBySection
 };
 
 module.exports = api;

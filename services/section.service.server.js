@@ -49,11 +49,17 @@ module.exports = function(app) {
   function deleteSection(req, res) {
     var sectionId = req.params['sectionId'];
 
-    sectionModel.deleteSection(sectionId)
+    sectionModel.findSectionById(sectionId)
+      .then(section => enrollmentModel.deleteEnrollmentBySection(section))
+      .then(section => sectionModel.deleteSection(sectionId))
       .then(function(status) {
-        enrollmentModel.deleteEnrollmentBySectionId(sectionId);
         res.json(status);
-    })
+      })
+    // sectionModel.deleteSection(sectionId)
+    //   .then(function(status) {
+    //     enrollmentModel.deleteEnrollmentBySection(section);
+    //     res.json(status);
+    // })
   }
 
 };
