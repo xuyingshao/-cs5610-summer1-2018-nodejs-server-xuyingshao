@@ -13,9 +13,8 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-  // res.header("Access-Control-Allow-Origin", "https://course-manager-angular-jeanne.herokuapp.com");
-
+  // res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.header("Access-Control-Allow-Origin", "https://course-manager-angular-jeanne.herokuapp.com");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-type, Accept");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Credentials", "true");
