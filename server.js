@@ -8,12 +8,12 @@ mongoose.connect('mongodb://heroku_qn8fgmb2:d6fgmkijnppti4buirrnf8bfjn@ds263590.
 
 var app = express();
 
-app.set('view engine', 'ejs');    // FIXME, deploy config
+// app.set('view engine', 'ejs');    // FIXME, deploy config
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-type, Accept");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Credentials", "true");
@@ -67,4 +67,4 @@ require('./services/user.service.server')(app);
 require('./services/section.service.server')(app);
 require('./services/enrollment.service.server')(app);
 
-app.listen(process.env.PORT || 4000);    // port
+app.listen(4000);    // port
