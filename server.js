@@ -8,6 +8,8 @@ mongoose.connect('mongodb://heroku_qn8fgmb2:d6fgmkijnppti4buirrnf8bfjn@ds263590.
 
 var app = express();
 
+app.set('view engine', 'ejs');    // FIXME, deploy config
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(function (req, res, next) {
@@ -65,4 +67,4 @@ require('./services/user.service.server')(app);
 require('./services/section.service.server')(app);
 require('./services/enrollment.service.server')(app);
 
-app.listen(4000);    // port
+app.listen(process.env.PORT || 4000);    // port
